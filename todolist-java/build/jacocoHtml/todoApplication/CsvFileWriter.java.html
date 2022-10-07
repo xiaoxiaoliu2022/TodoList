@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CsvFileWriter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">homework9</a> &gt; <a href="index.source.html" class="el_package">todoApplication</a> &gt; <span class="el_source">CsvFileWriter.java</span></div><h1>CsvFileWriter.java</h1><pre class="source lang-java linenums">package todoApplication;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+/**
+ * Write the output files
+ */
+public class CsvFileWriter {
+  private String csvFilePath;
+
+  /**
+   * constructore for the class CsvFileWriter
+   * @param csvFilePath - output file path
+   * @throws IOException - if an I/O exception has occurred
+   */
+<span class="fc" id="L19">  public CsvFileWriter(String csvFilePath) throws IOException {</span>
+<span class="fc" id="L20">    this.csvFilePath = csvFilePath;</span>
+<span class="fc" id="L21">  }</span>
+
+  /**
+   * Getter for the csv file path
+   * @return - the path of output csv file
+   */
+  public String getCsvFilePath() {
+<span class="fc" id="L28">    return csvFilePath;</span>
+  }
+
+  /**
+   * write new todo Item to the output csv file
+   * @param content - the description of todo
+   * @param append - wheter append nor not
+   */
+  public void writeTodo(String content, Boolean append) {
+    try{
+<span class="fc" id="L38">      File file = new File(csvFilePath);</span>
+      //will create a new file if file does not exist
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">      if(!file.exists()){</span>
+<span class="nc" id="L41">        file.createNewFile();</span>
+      }
+      //write content to file
+<span class="fc" id="L44">      FileWriter fw = new FileWriter(file,append);</span>
+<span class="fc" id="L45">      BufferedWriter bw = new BufferedWriter(fw);</span>
+<span class="fc" id="L46">      bw.write(content);</span>
+<span class="fc" id="L47">      bw.close();</span>
+<span class="nc" id="L48">    } catch (IOException ioe) {</span>
+<span class="nc" id="L49">      System.out.println(&quot;Something went wrong! : &quot; + ioe.getMessage());</span>
+<span class="nc" id="L50">      ioe.printStackTrace();</span>
+<span class="fc" id="L51">    }</span>
+<span class="fc" id="L52">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="todoApplication.CommandLineParserTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2022-04-26T02:11:35" hostname="Yuns-MacBook-Pro.local" time="0.043">
+  <properties/>
+  <testcase name="getDisplay()" classname="todoApplication.CommandLineParserTest" time="0.006"/>
+  <testcase name="argsProcessor()" classname="todoApplication.CommandLineParserTest" time="0.011"/>
+  <testcase name="getCompleted()" classname="todoApplication.CommandLineParserTest" time="0.001"/>
+  <testcase name="getDueDate()" classname="todoApplication.CommandLineParserTest" time="0.002"/>
+  <testcase name="getPriorityNumber()" classname="todoApplication.CommandLineParserTest" time="0.001"/>
+  <testcase name="getAddToDo()" classname="todoApplication.CommandLineParserTest" time="0.003"/>
+  <testcase name="getTodoText()" classname="todoApplication.CommandLineParserTest" time="0.0"/>
+  <testcase name="getCompletedTodoIds()" classname="todoApplication.CommandLineParserTest" time="0.001"/>
+  <testcase name="getCsvFile()" classname="todoApplication.CommandLineParserTest" time="0.002"/>
+  <testcase name="getCategory()" classname="todoApplication.CommandLineParserTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TodoListViewer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">homework9</a> &gt; <a href="index.source.html" class="el_package">todoApplication</a> &gt; <span class="el_source">TodoListViewer.java</span></div><h1>TodoListViewer.java</h1><pre class="source lang-java linenums">package todoApplication;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * Class TodoListViewer supports todos displaying
+ */
+<span class="fc" id="L12">public class TodoListViewer {</span>
+
+  /**
+   * Display the customized list of todos
+   * @param todos - todos list
+   * @param showIncomplete - if only show incompleted todos
+   * @param showCategory - category to be shown
+   * @param sortByDate - if sorted by date
+   * @param sortByPriority - if sorted by priority
+   * @throws InvalidArgumentException - if invalid arguments given
+   */
+  public void display(List&lt;Todo&gt; todos, Boolean showIncomplete ,String showCategory,
+    Boolean sortByDate, Boolean sortByPriority) throws InvalidArgumentException {
+
+<span class="fc bfc" id="L26" title="All 2 branches covered.">    if (showIncomplete) {</span>
+<span class="fc" id="L27">      todos = todos.stream()</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">          .filter(todo-&gt; todo.getCompleted() == false)</span>
+<span class="fc" id="L29">          .collect(Collectors.toList());</span>
+    }
+
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">    if (showCategory != null) {</span>
+<span class="fc" id="L33">      todos = todos.stream()</span>
+<span class="fc bfc" id="L34" title="All 4 branches covered.">          .filter(todo -&gt; todo.getCategory()!=null &amp;&amp; todo.getCategory().equals(showCategory.toLowerCase()))</span>
+<span class="fc" id="L35">          .collect(Collectors.toList());</span>
+    }
+
+<span class="fc bfc" id="L38" title="All 2 branches covered.">    if (todos.isEmpty()) {</span>
+<span class="fc" id="L39">      throw new InvalidArgumentException(&quot;Error: no todos based on your filter.&quot;);</span>
+    }
+
+<span class="pc bpc" id="L42" title="1 of 4 branches missed.">    if (sortByDate &amp;&amp; sortByPriority) {</span>
+      // should not happen as we have checked in commandline parser
+<span class="nc" id="L44">      throw new InvalidArgumentException(&quot;Error: can not do sortByPriority and sortByDate at the same time&quot;);</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">    } else if (sortByDate) {</span>
+      //dueDate provided with &quot;?&quot; will be collected to a lise and added to the sorted list
+<span class="fc" id="L47">      List&lt;Todo&gt; invalidDateTodos = todos.stream()</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">          .filter(todo-&gt;todo.getDueDate()==null)</span>
+<span class="fc" id="L49">          .collect(Collectors.toList());</span>
+<span class="fc" id="L50">      todos = todos.stream()</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">          .filter(todo-&gt;todo.getDueDate()!=null)</span>
+<span class="fc" id="L52">          .collect(Collectors.toList());</span>
+<span class="fc" id="L53">      DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;MM/dd/yyyy&quot;);</span>
+<span class="fc" id="L54">      todos.sort(Comparator.comparing(todo -&gt; LocalDate.parse(todo.getDueDate(), formatter)));</span>
+<span class="fc" id="L55">      todos.addAll(invalidDateTodos);</span>
+
+<span class="fc bfc" id="L57" title="All 2 branches covered.">    } else if (sortByPriority) {</span>
+      //PriorityNum provided with &quot;?&quot; will be collected to a list and added to the sorted list
+<span class="fc" id="L59">      List&lt;Todo&gt; invalidPriorityTodos = todos.stream()</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">          .filter(todo-&gt;todo.getPriorityNum()==null)</span>
+<span class="fc" id="L61">          .collect(Collectors.toList());</span>
+<span class="fc" id="L62">      todos = todos.stream()</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">          .filter(todo-&gt;todo.getPriorityNum()!=null)</span>
+<span class="fc" id="L64">          .collect(Collectors.toList());</span>
+<span class="fc" id="L65">      todos.sort(Comparator.comparing(todo -&gt; todo.getPriorityNum()));</span>
+<span class="fc" id="L66">      todos.addAll(invalidPriorityTodos);</span>
+    }
+
+<span class="fc bfc" id="L69" title="All 2 branches covered.">    for(int i=0;i&lt;todos.size();i++) {</span>
+<span class="fc" id="L70">      System.out.println(todos.get(i).toString());</span>
+    }
+<span class="fc" id="L72">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

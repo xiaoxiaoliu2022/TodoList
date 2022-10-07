@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TodoList.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">homework9</a> &gt; <a href="index.source.html" class="el_package">todoApplication</a> &gt; <span class="el_source">TodoList.java</span></div><h1>TodoList.java</h1><pre class="source lang-java linenums">package todoApplication;
+
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Class TodoList supports functionality in add a new todo and completed an existing todo
+ */
+public class TodoList {
+<span class="fc" id="L11">  private List&lt;Todo&gt; todos = new ArrayList&lt;&gt;();</span>
+  private Integer todoSize;
+  private CsvFileReader csvFileReader;
+  private CsvFileWriter csvFileWriter;
+
+<span class="fc" id="L16">  private final String CSV_HEADER = &quot;\&quot;id\&quot;,\&quot;text\&quot;,\&quot;completed\&quot;,\&quot;due\&quot;,\&quot;priority\&quot;,\&quot;category\&quot;\n&quot;;</span>
+
+  /**
+   * constructor for class TodoList
+   * @param csvFileReader - csvFileReader
+   * @param csvFileWriter - csvFileWriter
+   * @throws FileNotFoundException - if not such file founded
+   */
+  public TodoList(CsvFileReader csvFileReader, CsvFileWriter csvFileWriter)
+<span class="fc" id="L25">      throws FileNotFoundException {</span>
+<span class="fc" id="L26">    this.csvFileReader = csvFileReader;</span>
+<span class="fc" id="L27">    this.csvFileWriter = csvFileWriter;</span>
+<span class="fc" id="L28">    initializeData(this.csvFileReader.readCsv());</span>
+<span class="fc" id="L29">  }</span>
+
+  /**
+   * Getter for Size
+   * @return - the size of todos
+   */
+  public Integer getTodoSize() {
+<span class="fc" id="L36">    return todos.size();</span>
+  }
+
+  /**
+   * Getter for the list of todos
+   * @return - a list of todos
+   */
+  public List&lt;Todo&gt; getTodos() {
+<span class="fc" id="L44">    return todos;</span>
+  }
+
+  /**
+   * Add new todo item to the todo list and update csv file
+   * @param item - new todo item
+   */
+  public void addNewTodo(Todo item){
+<span class="fc" id="L52">    todos.add(item);</span>
+    // automatic generate id for todoitem
+<span class="fc" id="L54">    String content = item.toString()+&quot;\n&quot;;</span>
+<span class="fc" id="L55">    this.csvFileWriter.writeTodo(content, true);</span>
+<span class="fc" id="L56">  }</span>
+
+  /**
+   * Set the completed status of an existing todo and update csv file
+   * @param ids - the id of todos
+   * @throws InvalidArgumentException - if the provided id not existing
+   */
+  public void completeTodoIds(List&lt;String&gt; ids) throws InvalidArgumentException {
+<span class="fc bfc" id="L64" title="All 2 branches covered.">    for (String id: ids) {</span>
+<span class="fc" id="L65">      Integer idx = (Integer.parseInt(id));</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">      if (idx&gt;this.getTodoSize()) {</span>
+<span class="fc" id="L67">        throw new InvalidArgumentException(&quot;Error: don't complete an unexisting id.&quot;);</span>
+      }
+<span class="fc" id="L69">      this.todos.get(idx-1).setCompleted();</span>
+<span class="fc" id="L70">    }</span>
+<span class="fc" id="L71">    StringBuilder str = new StringBuilder();</span>
+<span class="fc" id="L72">    str.append(CSV_HEADER);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">    for (int i=0; i&lt;this.todos.size();i++){</span>
+<span class="fc" id="L74">      str.append(this.todos.get(i).toString());</span>
+<span class="fc" id="L75">      str.append(&quot;\n&quot;);</span>
+    }
+<span class="fc" id="L77">    String content = str.toString();</span>
+<span class="fc" id="L78">    this.csvFileWriter.writeTodo(content, false);</span>
+<span class="fc" id="L79">  }</span>
+
+  /**
+   * Load data from csv file into todo list
+   * @param lines - a list of todos
+   */
+  private void initializeData(List&lt;String&gt; lines) {
+    //to skip the header, we need to iterate from i=1
+<span class="fc bfc" id="L87" title="All 2 branches covered.">    for(int i=1; i&lt; lines.size();i++){</span>
+<span class="fc" id="L88">      String line = lines.get(i);</span>
+<span class="fc" id="L89">      String[] list = line.split(&quot;\&quot;*,*\&quot;&quot;);</span>
+      // header: &quot;id&quot;,&quot;text&quot;,&quot;completed&quot;,&quot;due&quot;,&quot;priority&quot;,&quot;category&quot;
+<span class="fc" id="L91">      Integer id = Integer.parseInt(list[0]);</span>
+      //if dueDate is &quot;?&quot; it is null, else it is list[3], according the header sequence, and so on
+<span class="fc" id="L93">      String toText = list[1];</span>
+<span class="fc" id="L94">      Boolean completed = Boolean.parseBoolean(list[2]);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">      String dueDate = list[3].equals(&quot;?&quot;)?null:list[3];</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">      String priorityNum = list[4].equals(&quot;?&quot;)?null:list[4];</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">      String category = list[5].equals(&quot;?&quot;)?null:list[5];</span>
+<span class="fc" id="L98">      Todo todoItem = new Todo(id, toText, completed, dueDate, priorityNum, category);</span>
+<span class="fc" id="L99">      this.todos.add(todoItem);</span>
+    }
+<span class="fc" id="L101">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

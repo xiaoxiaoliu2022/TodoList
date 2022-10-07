@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TodoListController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">homework9</a> &gt; <a href="index.source.html" class="el_package">todoApplication</a> &gt; <span class="el_source">TodoListController.java</span></div><h1>TodoListController.java</h1><pre class="source lang-java linenums">package todoApplication;
+
+import java.util.List;
+
+/**
+ * TodoListController class stores information about todoList and TodoListviewer.
+ */
+public class TodoListController {
+
+  private TodoList model;
+  private TodoListViewer viewer;
+
+  /**
+   * Costructor for TodoListController
+   * @param model - a list of todos, encoded as TodoList
+   * @param viewer - a list of todos displaying, encoded as TodoListViewer
+   */
+<span class="fc" id="L18">  public TodoListController(TodoList model, TodoListViewer viewer) {</span>
+<span class="fc" id="L19">    this.model = model;</span>
+<span class="fc" id="L20">    this.viewer = viewer;</span>
+<span class="fc" id="L21">  }</span>
+
+  /**
+   * Add new todos
+   * @param todo - todo items
+   */
+  public void addNewTodo(Todo todo) {
+<span class="fc" id="L28">    model.addNewTodo(todo);</span>
+<span class="fc" id="L29">  }</span>
+
+  /**
+   * Getter for the size of todos
+   * @return - size number
+   */
+  public Integer getTodoSize() {
+<span class="fc" id="L36">    return model.getTodoSize();</span>
+  }
+
+  /**
+   * Getter for the list of todos
+   * @return - a list of todos
+   */
+  public List&lt;Todo&gt; getTodos() {
+<span class="fc" id="L44">    return model.getTodos();</span>
+  }
+
+  /**
+   * Set completed todo ids
+   * @param ids - todo id
+   * @throws InvalidArgumentException -if given invalid argument
+   */
+  public void completeTodoIds(List&lt;String&gt; ids) throws InvalidArgumentException {
+<span class="fc" id="L53">    model.completeTodoIds(ids);</span>
+<span class="fc" id="L54">  }</span>
+
+  /**
+   * Update todos displaying
+   * @param showIncomplete - if only show incompleted todos
+   * @param showCategory -category to be shown
+   * @param sortByDate -if sorted by date
+   * @param sortByPriority -if sorted by priority
+   * @throws InvalidArgumentException -if invalid arguments given
+   */
+  public void updateView(Boolean showIncomplete, String showCategory, Boolean sortByDate, Boolean sortByPriority)
+      throws InvalidArgumentException {
+<span class="fc" id="L66">    viewer.display(</span>
+<span class="fc" id="L67">        model.getTodos(),</span>
+        showIncomplete,
+        showCategory,
+        sortByDate,
+        sortByPriority
+    );
+<span class="fc" id="L73">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

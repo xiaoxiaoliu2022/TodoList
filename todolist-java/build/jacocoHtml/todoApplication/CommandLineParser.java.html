@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommandLineParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">homework9</a> &gt; <a href="index.source.html" class="el_package">todoApplication</a> &gt; <span class="el_source">CommandLineParser.java</span></div><h1>CommandLineParser.java</h1><pre class="source lang-java linenums">package todoApplication;
+
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * process and validates command line arguments.
+ */
+public class CommandLineParser {
+  public static final String CSV_FILE = &quot;--csv-file&quot;;
+  public static final String ADD_TODO = &quot;--add-todo&quot;;
+  public static final String TODO_TEXT = &quot;--todo-text&quot;;
+  public static final String COMPLETED = &quot;--completed&quot;;
+  public static final String DUE = &quot;--due&quot;;
+  public static final String PRIORITY = &quot;--priority&quot;;
+  public static final String CATEGORY = &quot;--category&quot;;
+  public static final String COMPLETE_TODO = &quot;--complete-todo&quot;;
+  public static final String DISPLAY = &quot;--display&quot;;
+  public static final String SHOW_INCOMPLETE = &quot;--show-incomplete&quot;;
+  public static final String SHOW_CATEGORY = &quot;--show-category&quot;;
+  public static final String SORT_BY_DATE = &quot;--sort-by-date&quot;;
+  public static final String SORT_BY_PRIORITY = &quot;--sort-by-priority&quot;;
+
+  public static final String DATE_PATTEN = &quot;^\\d{2}/\\d{2}/\\d{4}$&quot;;
+<span class="fc" id="L30">  public static String[] PRIORITIES = {&quot;1&quot;, &quot;2&quot;, &quot;3&quot;};</span>
+  public static final String COMPLETED_TODO_ID = &quot;^\\d+$&quot;;
+
+  private String csvFile ;
+<span class="fc" id="L34">  private Boolean addToDo = false;</span>
+  private String todoText;
+<span class="fc" id="L36">  private Boolean completed = false;</span>
+  private String dueDate;
+  private String priorityNum;
+  private String category;
+<span class="fc" id="L40">  private List&lt;String&gt; completedTodoIds = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L41">  private Boolean display = false;</span>
+<span class="fc" id="L42">  private Boolean showIncomplete = false;</span>
+  private String showCategory;
+<span class="fc" id="L44">  private Boolean sortByDate = false;</span>
+<span class="fc" id="L45">  private Boolean sortByPriority = false;</span>
+
+  /**
+   * Constructor for the CommandLineParser
+   * @param args- command line arguments
+   * @throws InvalidArgumentException - throws error when a aurguments not meet the expected
+   * requirements
+   */
+<span class="fc" id="L53">  public CommandLineParser(String[] args) throws InvalidArgumentException{</span>
+<span class="fc" id="L54">    this.argsProcessor(args);</span>
+<span class="fc" id="L55">  }</span>
+
+  /**
+   * Helper method to populate the instance variables
+   * @param args - command line arguments
+   * @throws InvalidArgumentException -throws error when a aurguments not meet the expected
+   * requirements
+   */
+  public void argsProcessor(String[] args) throws InvalidArgumentException{
+<span class="fc bfc" id="L64" title="All 2 branches covered.">    for (int i = 0; i &lt; args.length; i++) {</span>
+<span class="pc bpc" id="L65" title="1 of 14 branches missed.">      switch (args[i]) {</span>
+        case CSV_FILE:
+<span class="fc bfc" id="L67" title="All 2 branches covered.">          this.csvFile = ((i + 1) &lt; args.length) ? args[i + 1] : null;</span>
+<span class="fc" id="L68">          break;</span>
+        case ADD_TODO:
+<span class="fc" id="L70">          this.addToDo = true;</span>
+<span class="fc" id="L71">          break;</span>
+        case TODO_TEXT:
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">          this.todoText = ((i + 1) &lt; args.length) ? args[i + 1] : null;</span>
+<span class="fc" id="L74">          break;</span>
+        case COMPLETED:
+<span class="fc" id="L76">          this.completed = true;</span>
+<span class="fc" id="L77">          break;</span>
+        case DUE:
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">          this.dueDate = ((i + 1) &lt; args.length) ? args[i + 1] : null;</span>
+<span class="fc" id="L80">          break;</span>
+        case PRIORITY:
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">          this.priorityNum = ((i + 1) &lt; args.length) ? args[i + 1] : null;</span>
+<span class="fc" id="L83">          break;</span>
+        case CATEGORY:
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">          this.category = ((i + 1) &lt; args.length) ? args[i + 1] : null;</span>
+<span class="fc" id="L86">          break;</span>
+        //if there are multiple ids, user can keep adding them to the list to request
+        case COMPLETE_TODO:
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">          String completedTodoId = ((i + 1) &lt; args.length) ? args[i + 1] : null;</span>
+<span class="fc" id="L90">          this.completedTodoIds.add(completedTodoId);</span>
+<span class="fc" id="L91">          break;</span>
+        case DISPLAY:
+<span class="fc" id="L93">          this.display = true ;</span>
+<span class="fc" id="L94">          break;</span>
+        case SHOW_INCOMPLETE:
+<span class="nc" id="L96">          this.showIncomplete = true;</span>
+<span class="nc" id="L97">          break;</span>
+        case SHOW_CATEGORY:
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">          this.showCategory = ((i + 1) &lt; args.length) ? args[i + 1] : null;</span>
+<span class="fc" id="L100">          break;</span>
+        case SORT_BY_DATE:
+<span class="fc" id="L102">          this.sortByDate = true;</span>
+<span class="fc" id="L103">          break;</span>
+        case SORT_BY_PRIORITY:
+<span class="fc" id="L105">          this.sortByPriority = true;</span>
+          break;
+
+      }
+    }
+    // valid csv file must be provided
+<span class="fc bfc" id="L111" title="All 2 branches covered.">    if (this.csvFile == null) {</span>
+<span class="fc" id="L112">      throw new InvalidArgumentException(&quot;Error: csv file not provided.&quot;);</span>
+    } else {
+      // use &quot;get path&quot; to confirm if the string processed is a valid csv file
+<span class="fc" id="L115">      Path path = Paths.get(this.csvFile);</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">      if(!Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {</span>
+<span class="fc" id="L117">        throw new InvalidArgumentException(&quot;Error: &quot; + this.csvFile + &quot; is not a valid file&quot;);</span>
+      }
+    }
+
+<span class="fc bfc" id="L121" title="All 2 branches covered.">    if (this.addToDo) {</span>
+      // todo-text must be provided when --add-todo is provided
+<span class="fc bfc" id="L123" title="All 4 branches covered.">      if(this.todoText==null || this.todoText.startsWith(&quot;--&quot;)) {</span>
+<span class="fc" id="L124">        throw new InvalidArgumentException(&quot;Error: please type in the todo description.&quot;);</span>
+      }
+      // dueDate must follow certain patten if provided
+<span class="fc bfc" id="L127" title="All 4 branches covered.">      if(this.dueDate != null &amp;&amp; !this.dueDate.matches(DATE_PATTEN)) {</span>
+<span class="fc" id="L128">        throw new InvalidArgumentException(&quot;Error: only accept date patten mm/dd/yyyy&quot;);</span>
+      };
+      // priorityNum can only be 1, 2, 3 if provided
+<span class="fc bfc" id="L131" title="All 4 branches covered.">      if(this.priorityNum != null &amp;&amp; !Arrays.asList(PRIORITIES).contains(this.priorityNum)) {</span>
+<span class="fc" id="L132">        throw new InvalidArgumentException(&quot;Error: priority number can only be 1, 2, or 3&quot;);</span>
+      }
+    }else {
+      // handle error when --add-todo is not provided
+<span class="pc bpc" id="L136" title="4 of 10 branches missed.">      if(this.todoText!=null || this.completed || this.priorityNum!=null || this.dueDate!=null || this.category!=null){</span>
+<span class="fc" id="L137">        throw new InvalidArgumentException(&quot;Error: --todo-text, --completed, --due, --priority, --category must follow --add-todo&quot;);</span>
+      }
+    }
+    // handle error when invalid id provided
+<span class="fc bfc" id="L141" title="All 2 branches covered.">    if(!this.completedTodoIds.isEmpty()) {</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">      for (String id:this.completedTodoIds) {</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (!id.matches(COMPLETED_TODO_ID)) {</span>
+<span class="fc" id="L144">          throw new InvalidArgumentException(&quot;Error: only accept integer type ID&quot;);</span>
+        }
+<span class="fc" id="L146">      }</span>
+    }
+    // handle error when sortByPriority and sortByDate are requested at the same time
+<span class="fc bfc" id="L149" title="All 2 branches covered.">    if(this.display) {</span>
+<span class="pc bpc" id="L150" title="1 of 4 branches missed.">      if(this.sortByPriority &amp;&amp; this.sortByDate) {</span>
+<span class="fc" id="L151">        throw new InvalidArgumentException(&quot;Error: can not do sortByPriority and sortByDate at the same time&quot;);</span>
+      }
+    }
+
+<span class="fc" id="L155">  }</span>
+
+  /**
+   * Getter for a csv file
+   * @return - a csv file with a valid path
+   */
+  public String getCsvFile() {
+<span class="fc" id="L162">    return csvFile;</span>
+  }
+
+  /**
+   * check if a new to do is added
+   * @return - true if a new to do is added, otherwise return false
+   */
+  public Boolean getAddToDo() {
+<span class="fc" id="L170">    return addToDo;</span>
+  }
+
+  /**
+   * Getter for a due date
+   * @return - a due date
+   */
+  public String getDueDate() {
+<span class="fc" id="L178">    return dueDate;</span>
+  }
+
+  /**
+   * Getter for the to do text
+   * @return - the description of todo
+   */
+  public String getTodoText() {
+<span class="fc" id="L186">    return todoText;</span>
+  }
+
+  /**
+   * Getter for whether completed
+   * @return - true if to do is completed status, otherwise return false
+   */
+  public Boolean getCompleted() {
+<span class="fc" id="L194">    return completed;</span>
+  }
+
+  /**
+   * Getter for the priority number
+   * @return - the priority number
+   */
+  public String getPriorityNum() {
+<span class="fc" id="L202">    return priorityNum;</span>
+  }
+
+  /**
+   * Getter for the category
+   * @return - the category of todo
+   */
+  public String getCategory() {
+<span class="fc" id="L210">    return category;</span>
+  }
+
+  /**
+   * Getter for the completed todo ids
+   * @return - a list of ids that marked completed status
+   */
+  public List&lt;String&gt; getCompletedTodoIds() {
+<span class="fc" id="L218">    return completedTodoIds;</span>
+  }
+
+  /**
+   * Getter for whether display
+   * @return - true if display is provided, otherwise return false
+   */
+  public Boolean getDisplay() {
+<span class="fc" id="L226">    return display;</span>
+  }
+
+  /**
+   * Getter for whether show incompleted only
+   * @return - true if --show-incomplete is provided, otherwise return false
+   */
+  public Boolean getShowIncomplete() {
+<span class="nc" id="L234">    return showIncomplete;</span>
+  }
+
+  /**
+   * Gettre for category to be displayed
+   * @return - the category to be displayed with the given category, otherwise return null
+   */
+  public String getShowCategory() {
+<span class="nc" id="L242">    return showCategory;</span>
+  }
+
+  /**
+   * Getter for whether sort by date
+   * @return - true if --sort-by-date is provided, otherwise return false
+   */
+  public Boolean getSortByDate() {
+<span class="nc" id="L250">    return sortByDate;</span>
+  }
+
+  /**
+   * Getter for whether sort by priority
+   * @return - true if --sort-by-priority is provided, otherwise return false
+   */
+  public Boolean getSortByPriority() {
+<span class="nc" id="L258">    return sortByPriority;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
